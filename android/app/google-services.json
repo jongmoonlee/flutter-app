@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "65089644398",
+    "firebase_url": "https://tomichat-a942a.firebaseio.com",
+    "project_id": "tomichat-a942a",
+    "storage_bucket": "tomichat-a942a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:65089644398:android:967aa7ac75f7235acf437f",
+        "android_client_info": {
+          "package_name": "co.tomichat.flash_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "65089644398-f2lsucuqi0p473ivckrvh7mnlu9vdhlq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQJiggUv1SN-VWWJ4s_MRiO1SPXwa9UhY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "65089644398-f2lsucuqi0p473ivckrvh7mnlu9vdhlq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
