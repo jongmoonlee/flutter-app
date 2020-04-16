@@ -1,17 +1,15 @@
+
 import 'package:flash_chat/screens/about_screen.dart';
-import 'package:flash_chat/screens/todoList_screen.dart';
-import 'package:flash_chat/screens/quiz_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'login_screen.dart';
-import 'play_screen.dart';
 import 'ante_chatroom_screen.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash_chat/components/buttons.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
-
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -77,65 +75,30 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Material(
-                    color: Colors.black54,
-                    child: Center(
-                      child: Ink(
-                        decoration: const ShapeDecoration(
-                          color: Colors.lightBlue,
-                          shape: CircleBorder(),
-                        ),
-                        child: IconButton(
-                          icon: Icon(Icons.chat_bubble_outline),
-                          color: Colors.white,
-                          onPressed: () {
-                            isLoggedIn
-                                ? Navigator.pushNamed(context, LoginScreen.id)
-                                : Navigator.pushNamed(
-                                    context, AnteChatroomScreen.id);
-                          },
-                        ),
-                      ),
+                  Row(
+                    children: <Widget>[
+                      IconBtn(
+                        bgColor: Colors.yellow,
+                        iconColor: Colors.black,
+                        size: 40,
+                        icon: Icon(Icons.chat_bubble_outline),
+                        onPressed: (){isLoggedIn
+                            ? Navigator.pushNamed(context, LoginScreen.id)
+                            : Navigator.pushNamed(
+                            context, AnteChatroomScreen.id);}
                     ),
-                  ),
-                  Material(
-                    color: Colors.black54,
-                    child: Center(
-                      child: Ink(
-                        decoration: const ShapeDecoration(
-                          color: Colors.lightBlue,
-                          shape: CircleBorder(),
-                        ),
-                        child: IconButton(
+                      IconBtn(
+                          iconColor: Colors.blue,
+                          bgColor: Colors.white,
+                          size: 40,
                           icon: Icon(Icons.pets),
-                          color: Colors.white,
-                          onPressed: () {
+                          onPressed: (){
                             Navigator.pushNamed(context, AboutScreen.id);
-                          },
-                        ),
-                      ),
-                    ),
+                          }),],
                   ),
-                  Material(
-                    color: Colors.black54,
-                    child: Center(
-                      child: Ink(
-                        decoration: const ShapeDecoration(
-                          color: Colors.lightBlue,
-                          shape: CircleBorder(),
-                        ),
-                        child: IconButton(
-                          icon: Icon(Icons.videogame_asset),
-                          color: Colors.white,
-                          onPressed: () {
-                            Navigator.pushNamed(context, PlayScreen.id);
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
+
                 ],
               ),
             ),
@@ -145,3 +108,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 }
+
+
+
+

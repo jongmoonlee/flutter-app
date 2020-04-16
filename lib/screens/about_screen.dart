@@ -1,8 +1,9 @@
+import 'package:flash_chat/screens/play_screen.dart';
 import 'package:flash_chat/screens/profile_screen.dart';
 import 'package:flash_chat/screens/todoList_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flash_chat/components/rounded_button.dart';
+import 'package:flash_chat/components/buttons.dart';
 import 'package:flash_chat/screens/quiz_screen.dart';
 
 class AboutScreen extends StatelessWidget {
@@ -10,7 +11,7 @@ class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black54,
+      backgroundColor: Colors.black,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
@@ -21,12 +22,12 @@ class AboutScreen extends StatelessWidget {
               height: 180.0,
               child: CircleAvatar(
                 radius: 180.0, //
-                backgroundColor: Colors.black54,
+                backgroundColor: Colors.black,
                 child: Image.asset('images/about_page.png'),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(50.0),
+              padding: const EdgeInsets.only(left: 50,right: 50,top: 50),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -50,6 +51,13 @@ class AboutScreen extends StatelessWidget {
                     buttonTitle: 'Quiz',
                     onPressed: () {
                       Navigator.pushNamed(context, QuizScreen.id);
+                    },
+                  ),
+                  RoundedButton(
+                    buttonColour: Colors.blue,
+                    buttonTitle: 'Play',
+                    onPressed: () {
+                      Navigator.pushNamed(context, PlayScreen.id);
                     },
                   ),
                 ],

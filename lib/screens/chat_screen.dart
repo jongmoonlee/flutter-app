@@ -1,3 +1,4 @@
+import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -5,6 +6,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 final _firestore = Firestore.instance;
+final messageTextController = TextEditingController();
+final _auth = FirebaseAuth.instance;
+
 FirebaseUser loggedInUser;
 
 class ChatScreen extends StatefulWidget {
@@ -14,8 +18,8 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final messageTextController = TextEditingController();
-  final _auth = FirebaseAuth.instance;
+
+
 
   String messageText;
 
@@ -31,8 +35,11 @@ class _ChatScreenState extends State<ChatScreen> {
       if (user != null) {
         loggedInUser = user;
       }
+      else{
+        Navigator.pushNamed(context, LoginScreen.id);
+      }
     } catch (e) {
-      print(e);
+      Navigator.pushNamed(context, LoginScreen.id);
     }
   }
 
@@ -119,6 +126,8 @@ class MessagesStream extends StatelessWidget {
   ScrollController _scrollController = new ScrollController();
   @override
   Widget build(BuildContext context) {
+
+
     return StreamBuilder<QuerySnapshot>(
       stream: _firestore.collection('messages').snapshots(),
       builder: (context, snapshot) {
