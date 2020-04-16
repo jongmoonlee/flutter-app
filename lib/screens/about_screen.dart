@@ -1,3 +1,4 @@
+import 'package:flash_chat/screens/ante_quizroom_screen.dart';
 import 'package:flash_chat/screens/play_screen.dart';
 import 'package:flash_chat/screens/profile_screen.dart';
 import 'package:flash_chat/screens/todoList_screen.dart';
@@ -50,7 +51,7 @@ class AboutScreen extends StatelessWidget {
                     buttonColour: Colors.blue,
                     buttonTitle: 'Quiz',
                     onPressed: () {
-                      Navigator.pushNamed(context, QuizScreen.id);
+                      Navigator.pushNamed(context, AnteQuizroomScreen.id);
                     },
                   ),
                   RoundedButton(

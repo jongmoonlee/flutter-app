@@ -13,6 +13,7 @@ import 'screens/play_screen.dart';
 import 'screens/profile_screen.dart';
 
 import 'screens/ante_chatroom_screen.dart';
+import 'screens/ante_quizroom_screen.dart';
 import 'screens/quiz_screen.dart';
 import 'screens/todoList_screen.dart';
 
@@ -38,6 +39,7 @@ class FlashChat extends StatelessWidget {
           QuizScreen.id: (context) => QuizScreen(),
           TodoListScreen.id: (context) => TodoListScreen(),
           AnteChatroomScreen.id: (context) => AnteChatroomScreen(),
+          AnteQuizroomScreen.id: (context) => AnteQuizroomScreen(),
           ProfileScreen.id: (context) => ProfileScreen(),
         });
   }
