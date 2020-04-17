@@ -15,7 +15,7 @@ class _AnteQuizroomScreenState extends State<AnteQuizroomScreen> {
   bool _uploaded = false;
   String _downloadUrl;
 
-  StorageReference _reference = FirebaseStorage.instance.ref().child('myimage.jpg');
+  StorageReference _reference = FirebaseStorage.instance.ref().child('yumtomi@email.com.jpg');
 
   Future uploadImage () async{
     try {

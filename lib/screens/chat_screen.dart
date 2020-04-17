@@ -4,10 +4,16 @@ import 'package:flash_chat/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 final _firestore = Firestore.instance;
 final messageTextController = TextEditingController();
 final _auth = FirebaseAuth.instance;
+
+
+enum Select { camera, gallery}
 
 FirebaseUser loggedInUser;
 
@@ -19,9 +25,14 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
 
-
-
   String messageText;
+  File _imageFile;
+  bool _uploaded = false;
+  bool _usrImageExists;
+  String _downloadUrl;
+  String _fileName;
+  Select _selection;
+  StorageReference _reference = FirebaseStorage.instance.ref().child('');
 
   @override
   void initState() {
@@ -42,6 +53,39 @@ class _ChatScreenState extends State<ChatScreen> {
       Navigator.pushNamed(context, LoginScreen.id);
     }
   }
+
+  Future uploadImage () async{
+    try {
+      StorageUploadTask uploadTask = _reference.putFile(_imageFile);
+      StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+      _uploaded = uploadTask.isComplete;
+    }
+    catch (e){
+      print (e);
+    }
+    setState(() {
+      _uploaded: true;
+      _usrImageExists = true;
+      print('uploade?:$_uploaded');
+    });
+  }
+
+
+  Future getImage (bool isCamera) async{
+    File image;
+    if(isCamera){
+      image = await ImagePicker.pickImage(source: ImageSource.camera);
+      uploadImage();
+    } else {
+      image = await ImagePicker.pickImage(source: ImageSource.gallery);
+      print('gallery is seledted');
+      uploadImage();
+    }
+    setState(() {
+      _imageFile = image;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +128,51 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+//                  IconButton(
+//                      icon: Icon(
+//                        Icons.add_box,
+//                        color: Colors.white,
+//                        size: 25,
+//                  ), onPressed: null),
+                  Positioned(
+                    top: 0.0,left:0.0,
+                    child: Padding(
+
+                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          cardColor: Colors.white,
+
+                        ),
+                        child: PopupMenuButton<Select>(
+                          padding: EdgeInsets.all(8),
+                          onSelected: (Select result){
+                            setState(() {
+                              _selection = result;
+                              print(_selection);
+                              _selection == Select.camera ? getImage(true): getImage(false);
+                            });
+                          },
+                          itemBuilder: (BuildContext context) => <PopupMenuEntry<Select>>[
+
+                            const PopupMenuItem<Select>(
+                                value: Select.camera,
+                                height: 15,
+                                child: IconButton(
+                                  icon: Icon(Icons.camera_alt,color: Colors.black,size: 35,),
+                                )
+                            ),
+                            const PopupMenuItem<Select>(
+                                value: Select.gallery,
+                                child: IconButton(
+                                  icon: Icon(Icons.collections,color: Colors.black,size: 35),
+                                )
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child: TextField(
                       controller: messageTextController,

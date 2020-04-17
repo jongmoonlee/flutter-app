@@ -1,7 +1,8 @@
+import 'package:flash_chat/screens/play_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flash_chat/widgets/task_tile.dart';
+import 'package:flash_chat/widgets/skill_tile.dart';
 import 'package:provider/provider.dart';
-import 'package:flash_chat/models/task_data.dart';
+import 'package:flash_chat/models/skill_data.dart';
 
 class TasksList extends StatelessWidget {
   @override

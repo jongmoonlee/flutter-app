@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flash_chat/components/buttons.dart';
 import 'package:flash_chat/screens/chat_screen.dart';
+import 'package:flash_chat/screens/profile_screen.dart';
 
 class AnteChatroomScreen extends StatelessWidget {
   static const String id = 'anteChatroom_screen';
@@ -11,23 +12,10 @@ class AnteChatroomScreen extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  IconBtn(
-                    size: 25,
-                    iconColor: Colors.black54,
-                    bgColor: Colors.yellow,
-                    icon: Icon(Icons.settings),
-                    onPressed:(){}
-                ),]
-              ),
-            ),
+
             Padding(
               padding: const EdgeInsets.only(top:0),
               child: SizedBox(
@@ -43,25 +31,24 @@ class AnteChatroomScreen extends StatelessWidget {
               children: <Widget>[
                 RoundedButton(
             buttonColour: Colors.blueAccent,
-              buttonTitle: 'Join the chat room',
+              buttonTitle: 'Join',
               onPressed: () {
                 Navigator.pushNamed(context, ChatScreen.id);
               }),
                 RoundedButton(
                   buttonColour: Colors.blue,
-                  buttonTitle: 'Make a chat room',
+                  buttonTitle: 'Make a new',
                   onPressed: () {
                     Navigator.pushNamed(context, ChatScreen.id);
                   },
                 ),
                 RoundedButton(
                   buttonColour: Colors.blue,
-                  buttonTitle: 'Search a chat room',
+                  buttonTitle: 'Search',
                   onPressed: () {
                     Navigator.pushNamed(context, ChatScreen.id);
                   },
                 ),],
-
               ),
 
 
@@ -89,12 +76,15 @@ class AnteChatroomScreen extends StatelessWidget {
                     icon: Icon(Icons.search),
                     onPressed:(){}
                 ),
+
                 IconBtn(
-                    size: 30,
+                    size: 25,
                     iconColor: Colors.black,
                     bgColor: Colors.yellow,
-                    icon: Icon(Icons.more_horiz),
-                    onPressed:(){}
+                    icon: Icon(Icons.settings),
+                    onPressed:(){
+                      Navigator.pushNamed(context,ProfileScreen.id );
+                    }
                 ),
               ]
             ),

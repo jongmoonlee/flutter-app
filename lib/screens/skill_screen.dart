@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flash_chat/widgets/task_list.dart';
-import 'add_task_screen.dart';
+import 'package:flash_chat/widgets/skill_list.dart';
+import 'add_skill_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:flash_chat/models/task_data.dart';
+import 'package:flash_chat/models/skill_data.dart';
 
-class TasksScreen extends StatelessWidget {
+class SkillScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,29 +31,20 @@ class TasksScreen extends StatelessWidget {
                 top: 60.0, left: 30.0, right: 30.0, bottom: 30.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                CircleAvatar(
-                  child: Icon(
-                    Icons.list,
-                    size: 30.0,
-                    color: Colors.lightBlueAccent,
-                  ),
-                  backgroundColor: Colors.white,
-                  radius: 30.0,
-                ),
+              children: <Widget>[//
                 SizedBox(
                   height: 10.0,
                 ),
                 Text(
-                  'Todos',
+                  "Here\'s a list what Tomi can do...\nShe ticked all the boxes",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 50.0,
+                    fontSize: 25.0,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 Text(
-                  '${Provider.of<TaskData>(context).taskCount} Tasks',
+                  '${Provider.of<TaskData>(context).taskCount} Capabilties fo far',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,

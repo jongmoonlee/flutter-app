@@ -18,7 +18,7 @@ class _PlayScreenState extends State<PlayScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Container(
-                  child: Image.asset('images/yumdance.gif'),
+                  child: Image.asset('images/yum_Spin.gif'),
                   height: 150.0,
                   padding: EdgeInsets.all(3)),
               Container(

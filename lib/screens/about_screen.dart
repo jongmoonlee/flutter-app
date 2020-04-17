@@ -1,7 +1,7 @@
 import 'package:flash_chat/screens/ante_quizroom_screen.dart';
 import 'package:flash_chat/screens/play_screen.dart';
 import 'package:flash_chat/screens/profile_screen.dart';
-import 'package:flash_chat/screens/todoList_screen.dart';
+import 'package:flash_chat/screens/skillList_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/components/buttons.dart';
@@ -42,9 +42,9 @@ class AboutScreen extends StatelessWidget {
                   ),
                   RoundedButton(
                     buttonColour: Colors.blue,
-                    buttonTitle: 'Tricks',
+                    buttonTitle: 'Skills',
                     onPressed: () {
-                      Navigator.pushNamed(context, TodoListScreen.id);
+                      Navigator.pushNamed(context, SkillListScreen.id);
                     },
                   ),
                   RoundedButton(
@@ -54,13 +54,7 @@ class AboutScreen extends StatelessWidget {
                       Navigator.pushNamed(context, AnteQuizroomScreen.id);
                     },
                   ),
-                  RoundedButton(
-                    buttonColour: Colors.blue,
-                    buttonTitle: 'Play',
-                    onPressed: () {
-                      Navigator.pushNamed(context, PlayScreen.id);
-                    },
-                  ),
+
                 ],
               ),
             ),

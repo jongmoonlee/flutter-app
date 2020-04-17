@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flash_chat/models/task.dart';
+import 'package:flash_chat/models/skill.dart';
 import 'package:provider/provider.dart';
-import 'package:flash_chat/models/task_data.dart';
+import 'package:flash_chat/models/skill_data.dart';
 
 class AddTaskScreen extends StatelessWidget {
   @override
@@ -23,7 +23,7 @@ class AddTaskScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Text(
-              'Add Task',
+              'Add Skills',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 30.0,

@@ -1,14 +1,17 @@
 import 'package:flutter/foundation.dart';
-import 'package:flash_chat/models/task.dart';
+import 'package:flash_chat/models/skill.dart';
 import 'dart:collection';
 
 class TaskData extends ChangeNotifier {
   List<Task> _tasks = [
-    Task(name: 'Walk Tomi'),
-    Task(name: 'Feed Tomi'),
-    Task(name: 'Play fetch'),
-    Task(name: 'Teach Tomi dance'),
-    Task(name: 'Teach Tomi swim'),
+    Task(name: 'Walk '),
+    Task(name: 'Chew '),
+    Task(name: 'Dance'),
+    Task(name: 'Spin'),
+    Task(name: 'Clean dishes'),
+    Task(name: 'Socialise'),
+    Task(name: 'Swim'),
+    Task(name: 'Watch TV'),
   ];
 
   UnmodifiableListView<Task> get tasks {
@@ -28,6 +31,10 @@ class TaskData extends ChangeNotifier {
   void updateTask(Task task) {
     task.toggleDone();
     notifyListeners();
+  }
+
+  String getCurrentTask(int){
+    return _tasks[int].name;
   }
 
   void deleteTask(Task task) {

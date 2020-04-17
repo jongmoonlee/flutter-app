@@ -15,7 +15,7 @@ import 'screens/profile_screen.dart';
 import 'screens/ante_chatroom_screen.dart';
 import 'screens/ante_quizroom_screen.dart';
 import 'screens/quiz_screen.dart';
-import 'screens/todoList_screen.dart';
+import 'screens/skillList_screen.dart';
 
 void main() => runApp(FlashChat());
 
@@ -37,7 +37,7 @@ class FlashChat extends StatelessWidget {
           AboutScreen.id: (context) => AboutScreen(),
           PlayScreen.id: (context) => PlayScreen(),
           QuizScreen.id: (context) => QuizScreen(),
-          TodoListScreen.id: (context) => TodoListScreen(),
+          SkillListScreen.id: (context) => SkillListScreen(),
           AnteChatroomScreen.id: (context) => AnteChatroomScreen(),
           AnteQuizroomScreen.id: (context) => AnteQuizroomScreen(),
           ProfileScreen.id: (context) => ProfileScreen(),

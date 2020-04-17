@@ -30,6 +30,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       setState(() {
         isLoggedIn = false;
       });
+//      print (loggedInUser.email);
     }
   }
 
@@ -58,11 +59,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   child: TextLiquidFill(
                     text: 'Tomichat',
 //                    boxBackgroundColor: Colors.white,
-                    waveColor: Colors.white,
+                    waveColor: Colors.yellow,
                     textStyle: TextStyle(
                         fontSize: 45.0,
                         fontFamily: "PermanentMarker",
-                        fontWeight: FontWeight.bold),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.yellowAccent),
                     boxHeight: 100.0,
                     boxWidth: 250,
                   ),
