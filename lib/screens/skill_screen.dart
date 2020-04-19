@@ -39,7 +39,7 @@ class SkillScreen extends StatelessWidget {
                   "Here\'s a list what Tomi can do...\nShe ticked all the boxes",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 25.0,
+                    fontSize: 20.0,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -47,7 +47,7 @@ class SkillScreen extends StatelessWidget {
                   '${Provider.of<TaskData>(context).taskCount} Capabilties fo far',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: 15,
                   ),
                 ),
               ],

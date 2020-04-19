@@ -1,8 +1,30 @@
+import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flash_chat/services/getCurrentUser.dart';
+import 'package:catcher/catcher_plugin.dart';
+
+
+final _firestore = Firestore.instance;
+final messageTextController = TextEditingController();
+final _auth = FirebaseAuth.instance;
+
+File _imageFile;
+FirebaseUser loggedInUser;
+bool _usrImageExists = false;
+bool _uploaded = false;
+String _downloadUrl;
+Select _selection;
+
+StorageReference _reference = FirebaseStorage.instance.ref().child('');
+
+enum Select { camera, gallery}
+
 
 class ProfileScreen extends StatefulWidget {
   static const id = 'profile_screen';
@@ -10,25 +32,86 @@ class ProfileScreen extends StatefulWidget {
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-enum Select { camera, gallery}
+@override
 
-class _ProfileScreenState extends State<ProfileScreen>{
-  File _imageFile;
-  bool _uploaded = false;
-  bool _usrImageExists;
-  String _downloadUrl;
-  String _fileName;
-  Select _selection;
-  StorageReference _reference = FirebaseStorage.instance.ref().child('');
+void aa() async{
+  var b = await _firestore.collection('users').getDocuments();
+}
 
-  //get user info
-  setFileName (){
-    User().getCurrentUser().then((var result){
-      _fileName = result;
-      _reference = FirebaseStorage.instance.ref().child('$_fileName.jpg');
-//      print('eamil:$_fileName');
-    });
+class _ProfileScreenState extends State<ProfileScreen> {
+  StreamBuilder _widget;
+
+  @override
+
+  List<Users> listUser= [];
+  List<String> emailList =[];
+
+  void initState(){
+    super.initState();
+    _widget = StreamBuilder<QuerySnapshot>(
+      stream: _firestore.collection('users').snapshots(),
+      builder: (context, snapshot) {
+
+        final messages = snapshot.data.documents;
+
+        for (var message in messages) {
+          final email = message.data['email'];
+          final hasAvatar = message.data['hasAvatar'];
+          final isLoggedIn = message.data['isLoggedIn'];
+          final user = Users(
+              email: email,
+              hasAvatar: hasAvatar,
+              isLoggedIn: isLoggedIn
+          );
+          listUser.add(user);
+          emailList.add(email);
+        }
+        print ('ulogged in user: $loggedInUserEmail');
+        print ('lix:$emailList');
+
+        print(emailList.indexOf(loggedInUserEmail));
+        if (emailList.indexOf(loggedInUserEmail) == -1){
+          _usrImageExists = false;
+        } else {
+          _usrImageExists = true;
+          getCurrentUserImage();
+        }
+        return SizedBox();
+      },
+    );
+
+    getCurrentUser();
+
+
+    print('xxxxxxx');
   }
+
+
+
+
+  String loggedInUserEmail;
+
+  void getCurrentUser() async {
+      final user = await _auth.currentUser();
+        loggedInUser = user;
+      loggedInUserEmail= loggedInUser.email;
+  }
+
+    getCurrentUserImage() async{
+    try{
+      StorageReference _reference = FirebaseStorage.instance.ref().child('$loggedInUserEmail.jpg');
+      _downloadUrl = await _reference.getDownloadURL();
+      setState(() {
+        _usrImageExists = true;
+      });
+
+    }
+    catch (e){
+      setState(() {
+        _usrImageExists = false;
+      });
+    }}
+
 
   Future uploadImage () async{
     try {
@@ -46,26 +129,6 @@ class _ProfileScreenState extends State<ProfileScreen>{
     });
   }
 
-  getCurrentUserImage() async{
-    try{
-      StorageReference _reference = FirebaseStorage.instance.ref().child('$_fileName.jpg');
-      _downloadUrl = await _reference.getDownloadURL();
-      setState(() {
-        _usrImageExists = true;
-      });
-//      print('no error');
-//      print('_userImageExiste?: $_usrImageExists');
-    }
-    catch (e){
-      setState(() {
-        _usrImageExists = false;
-      });
-      print ('error:$e');
-    }
-  }
-
-//    StorageReference _reference = FirebaseStorage.instance.ref().child('myimage.jpg');
-
   Future getImage (bool isCamera) async{
     File image;
     if(isCamera){
@@ -80,10 +143,11 @@ class _ProfileScreenState extends State<ProfileScreen>{
       _imageFile = image;
     });
   }
+
+
   @override
   Widget build(BuildContext context) {
-    setFileName();
-    getCurrentUserImage();
+//    return _widget;
 
     return Scaffold(
       backgroundColor: Colors.yellow,
@@ -91,26 +155,24 @@ class _ProfileScreenState extends State<ProfileScreen>{
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
-            Center(
-              child: SizedBox(
-                height: 150.0,
-                child: Stack(
-                  children:<Widget> [ClipOval(
-
-                    child: _usrImageExists? Image.network(_downloadUrl,width: 100,
-                        height: 100,
-                        fit: BoxFit.cover) :Image.asset('images/about_page.png')
-//                    ,
-                  ),
-                   Positioned(top: 50.0, left: 65.0,
-                   child: IconButton(
-                    icon: Icon(Icons.camera_alt),
-                  color: Colors.yellowAccent,
-                  onPressed: (){
-                    print('pressed');
-                  },
-                ),
-              ),
+            SizedBox(
+              height: 150,
+              child: Stack(
+                  children:<Widget> [
+                    ClipOval(
+                      child: _usrImageExists? Image.network(_downloadUrl,width: 150,
+                      height: 150,
+                      fit: BoxFit.cover) :Icon(Icons.person_outline,size: 150.0,)
+                    ),
+                    Positioned(top: 50.0, left: 65.0,
+                      child: IconButton(
+                        icon: Icon(Icons.camera_alt),
+                        color: Colors.yellowAccent,
+                        onPressed: (){
+                          print('pressed');
+                        },
+                      ),
+                    ),
                     Positioned(
                       top: 50.0,left:75.0,
                       child: Padding(
@@ -149,13 +211,56 @@ class _ProfileScreenState extends State<ProfileScreen>{
                           ),
                         ),
                       ),
-                    )
-                ]),
+                    ),
+                  ]
               ),
             ),
-          ],
+
+        ],
         ),
       ),
     );
+    }
+
+  StreamBuilder<QuerySnapshot> buildStreamBuilder() {
+    print('yyyyyyyy');
+    return StreamBuilder<QuerySnapshot>(
+          stream: _firestore.collection('users').snapshots(),
+          builder: (context, snapshot) {
+
+            final messages = snapshot.data.documents;
+
+            for (var message in messages) {
+              final email = message.data['email'];
+              final hasAvatar = message.data['hasAvatar'];
+              final isLoggedIn = message.data['isLoggedIn'];
+              final user = Users(
+                  email: email,
+                  hasAvatar: hasAvatar,
+                  isLoggedIn: isLoggedIn
+              );
+              listUser.add(user);
+              emailList.add(email);
+            }
+            print ('ulogged in user: $loggedInUserEmail');
+            print ('lix:$emailList');
+
+            print(emailList.indexOf(loggedInUserEmail));
+            if (emailList.indexOf(loggedInUserEmail) == -1){
+              _usrImageExists = false;
+            } else {
+              _usrImageExists = true;
+              getCurrentUserImage();
+            }
+            return SizedBox();
+          },
+        );
   }
+}
+
+class Users{
+  Users({this.email, this.hasAvatar, this.isLoggedIn});
+  final String email;
+  final bool hasAvatar;
+  final bool isLoggedIn;
 }

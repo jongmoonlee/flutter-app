@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         validator: (value) =>
                             value.isEmpty ? 'Email can\'t be empty' : null,
                         onChanged: (value) {
-                          email = value;
+                          email = value.trim();
                         },
                         onSaved: (value) => email = value,
                         decoration: kTextFieldDecoration.copyWith(
@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         validator: (value) =>
                             value.isEmpty ? 'Password can\'t be empty' : null,
                         onChanged: (value) {
-                          password = value;
+                          password = value.trim();
                         },
                         onSaved: (value) => password = value,
                         decoration: kTextFieldDecoration.copyWith(

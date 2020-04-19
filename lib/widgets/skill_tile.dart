@@ -18,10 +18,13 @@ class TaskTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onLongPress: longPressCallback,
+      contentPadding: EdgeInsets.only(top: 0,bottom: 0),
       title: Text(
         isChecked ? ('$taskTitle (need proof?  tab here)') : taskTitle,
         style: TextStyle(
             decoration: isChecked ? TextDecoration.none : null,
+            fontSize: 15.0,
+
             ),
       ),
 //      trailing: IconButton(
