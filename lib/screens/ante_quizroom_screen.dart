@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:flash_chat/screens/profile_screen.dart';
+import 'package:flash_chat/globals.dart' as globals;
 
 class AnteQuizroomScreen extends StatefulWidget {
   static const String id = 'anteQuizroom_screen';
@@ -64,6 +66,7 @@ class _AnteQuizroomScreenState extends State<AnteQuizroomScreen> {
             RaisedButton(
               child: Text('camera'),
                 onPressed: (){
+                  print(globals.currentUserImgUrl);
                   getImage(true);
                 }),
             SizedBox(height: 10.0,),

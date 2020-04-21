@@ -11,6 +11,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 final _firestore = Firestore.instance;
 final messageTextController = TextEditingController();
 final _auth = FirebaseAuth.instance;
+String downloadUrl;
+String tempFileName;
+bool uploaded = false;
 
 
 enum Select { camera, gallery}
@@ -29,10 +32,11 @@ class _ChatScreenState extends State<ChatScreen> {
   File _imageFile;
   bool _uploaded = false;
   bool _usrImageExists;
-  String _downloadUrl;
+
   String _fileName;
   Select _selection;
-  StorageReference _reference = FirebaseStorage.instance.ref().child('');
+
+  StorageReference _reference = FirebaseStorage.instance.ref();
 
   @override
   void initState() {
@@ -54,9 +58,18 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  Future uploadImage () async{
+  Future downloadImage(String fileName) async{
+    String downloadAddress = await _reference.child('$fileName').getDownloadURL();
+    setState(() {
+      downloadUrl = downloadAddress;
+      print ('DwnExe: $downloadUrl');
+      uploaded = true;
+    });
+  }
+
+  Future uploadImage (String fileName) async{
     try {
-      StorageUploadTask uploadTask = _reference.putFile(_imageFile);
+      StorageUploadTask uploadTask = _reference.child('$fileName').putFile(_imageFile);
       StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
       _uploaded = uploadTask.isComplete;
     }
@@ -67,22 +80,28 @@ class _ChatScreenState extends State<ChatScreen> {
       _uploaded: true;
       _usrImageExists = true;
       print('uploade?:$_uploaded');
+      downloadImage(tempFileName);
+
     });
   }
 
 
   Future getImage (bool isCamera) async{
     File image;
+
     if(isCamera){
       image = await ImagePicker.pickImage(source: ImageSource.camera);
-      uploadImage();
     } else {
       image = await ImagePicker.pickImage(source: ImageSource.gallery);
       print('gallery is seledted');
-      uploadImage();
+      uploadImage(DateTime.now().toIso8601String());
     }
     setState(() {
       _imageFile = image;
+      tempFileName = DateTime.now().toIso8601String();
+      uploadImage(tempFileName);
+
+
     });
   }
 
@@ -128,24 +147,14 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-//                  IconButton(
-//                      icon: Icon(
-//                        Icons.add_box,
-//                        color: Colors.white,
-//                        size: 25,
-//                  ), onPressed: null),
-                  Positioned(
-                    top: 0.0,left:0.0,
-                    child: Padding(
-
-                      padding: const EdgeInsets.symmetric(horizontal: 0),
+                  Stack(
+                    children:<Widget> [Positioned(
                       child: Theme(
                         data: Theme.of(context).copyWith(
                           cardColor: Colors.white,
 
                         ),
                         child: PopupMenuButton<Select>(
-                          padding: EdgeInsets.all(8),
                           onSelected: (Select result){
                             setState(() {
                               _selection = result;
@@ -171,7 +180,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           ],
                         ),
                       ),
-                    ),
+                    ),]
                   ),
                   Expanded(
                     child: TextField(
@@ -188,12 +197,16 @@ class _ChatScreenState extends State<ChatScreen> {
                       _firestore.collection('messages').add({
                         'text': messageText,
                         'sender': loggedInUser.email,
-                        'time': DateTime.now()
+                        'time': DateTime.now(),
+                        'isImg':uploaded,
+                        'downloadUrl':downloadUrl
                       });
                       setState(() {
                         MessagesStream()._scrollController.animateTo(0.0,
                             curve: Curves.easeOut,
                             duration: const Duration(milliseconds: 300));
+                        uploaded = false;
+
                       });
                     },
                     child: Text(
@@ -235,11 +248,16 @@ class MessagesStream extends StatelessWidget {
           final messageSender = message.data['sender'];
           final messageTime = message.data['time'];
           final currentUser = loggedInUser.email;
+          final isImgAttached = message.data['isImg'];
+          final downloadUrl = message.data['downloadUrl'];
           final messageBubble = MessageBubble(
               sender: messageSender,
               text: messageText,
               isMe: currentUser == messageSender,
-              time: messageTime.toDate());
+              isImgAttached:isImgAttached,
+              time: messageTime.toDate(),
+              downloadUrl:downloadUrl);
+
           messageBubbles.add(messageBubble);
         }
 
@@ -260,11 +278,13 @@ class MessagesStream extends StatelessWidget {
 }
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble({this.sender, this.text, this.time, this.isMe});
+  MessageBubble({this.sender, this.text, this.time, this.isMe, this.isImgAttached, this.downloadUrl});
   final String sender;
   final String text;
+  final String downloadUrl;
   final DateTime time;
   final bool isMe;
+  bool isImgAttached = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -314,10 +334,16 @@ class MessageBubble extends StatelessWidget {
                 Text(
                   '${time.toIso8601String().substring(11, 16)}',
                   style: TextStyle(color: Colors.white30, fontSize: 8.0),
-                )
-              ]),
+                ),
+                isImgAttached ?  Image.network(downloadUrl,height: 100, width: 100,):Container()
+             ]),
+
+
         ],
       ),
     );
   }
 }
+
+//TODO
+//Load associated image

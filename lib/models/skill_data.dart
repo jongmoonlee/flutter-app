@@ -6,7 +6,7 @@ class TaskData extends ChangeNotifier {
   List<Task> _tasks = [
     Task(name: 'Walk '),
     Task(name: 'Chew '),
-    Task(name: 'Dance'),
+//    Task(name: 'Dance'),
     Task(name: 'Spin'),
     Task(name: 'Clean dishes'),
     Task(name: 'Socialise'),
