@@ -1,4 +1,4 @@
 
 
-# Flush Chat app
+# Flutter Chat app
 
