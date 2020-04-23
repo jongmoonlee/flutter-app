@@ -7,6 +7,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flash_chat/components/message_stream.dart';
 
 final _firestore = Firestore.instance;
 final messageTextController = TextEditingController();
@@ -32,7 +33,6 @@ class _ChatScreenState extends State<ChatScreen> {
   File _imageFile;
   bool _uploaded = false;
   bool _usrImageExists;
-
   String _fileName;
   Select _selection;
 
@@ -81,14 +81,12 @@ class _ChatScreenState extends State<ChatScreen> {
       _usrImageExists = true;
       print('uploade?:$_uploaded');
       downloadImage(tempFileName);
-
     });
   }
 
 
   Future getImage (bool isCamera) async{
     File image;
-
     if(isCamera){
       image = await ImagePicker.pickImage(source: ImageSource.camera);
     } else {
@@ -100,11 +98,8 @@ class _ChatScreenState extends State<ChatScreen> {
       _imageFile = image;
       tempFileName = DateTime.now().toIso8601String();
       uploadImage(tempFileName);
-
-
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -152,7 +147,6 @@ class _ChatScreenState extends State<ChatScreen> {
                       child: Theme(
                         data: Theme.of(context).copyWith(
                           cardColor: Colors.white,
-
                         ),
                         child: PopupMenuButton<Select>(
                           onSelected: (Select result){
@@ -180,8 +174,12 @@ class _ChatScreenState extends State<ChatScreen> {
                           ],
                         ),
                       ),
-                    ),]
+                    ),
+                    ]
                   ),
+                  uploaded? CircularProgressIndicator(
+                      strokeWidth: 1,
+                      value: 1):Container(),
                   Expanded(
                     child: TextField(
                       controller: messageTextController,
@@ -201,12 +199,13 @@ class _ChatScreenState extends State<ChatScreen> {
                         'isImg':uploaded,
                         'downloadUrl':downloadUrl
                       });
+                      uploaded = false;
+                      print('uploaded: $uploaded');
                       setState(() {
-                        MessagesStream()._scrollController.animateTo(0.0,
+                        MessagesStream().scrollController.animateTo(0.0,
                             curve: Curves.easeOut,
                             duration: const Duration(milliseconds: 300));
-                        uploaded = false;
-
+                        MessagesStream();
                       });
                     },
                     child: Text(
@@ -224,126 +223,9 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
-class MessagesStream extends StatelessWidget {
-  ScrollController _scrollController = new ScrollController();
-  @override
-  Widget build(BuildContext context) {
 
 
-    return StreamBuilder<QuerySnapshot>(
-      stream: _firestore.collection('messages').snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.lightBlueAccent,
-            ),
-          );
-        }
-        final messages = snapshot.data.documents;
 
-        List<MessageBubble> messageBubbles = [];
-        for (var message in messages) {
-          final messageText = message.data['text'];
-          final messageSender = message.data['sender'];
-          final messageTime = message.data['time'];
-          final currentUser = loggedInUser.email;
-          final isImgAttached = message.data['isImg'];
-          final downloadUrl = message.data['downloadUrl'];
-          final messageBubble = MessageBubble(
-              sender: messageSender,
-              text: messageText,
-              isMe: currentUser == messageSender,
-              isImgAttached:isImgAttached,
-              time: messageTime.toDate(),
-              downloadUrl:downloadUrl);
-
-          messageBubbles.add(messageBubble);
-        }
-
-        messageBubbles.sort(
-            (MessageBubble b, MessageBubble a) => a.time.compareTo(b.time));
-
-        return Expanded(
-          child: ListView(
-            reverse: true,
-            controller: _scrollController,
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
-            children: messageBubbles,
-          ),
-        );
-      },
-    );
-  }
-}
-
-class MessageBubble extends StatelessWidget {
-  MessageBubble({this.sender, this.text, this.time, this.isMe, this.isImgAttached, this.downloadUrl});
-  final String sender;
-  final String text;
-  final String downloadUrl;
-  final DateTime time;
-  final bool isMe;
-  bool isImgAttached = false;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(10.0),
-      child: Column(
-        crossAxisAlignment:
-            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            '$sender:',
-            style: TextStyle(
-              fontSize: 12.0,
-              color: Colors.white,
-            ),
-          ),
-          Row(
-              mainAxisAlignment:
-                  isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-              crossAxisAlignment:
-                  isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-              children: <Widget>[
-                Material(
-                  borderRadius: isMe
-                      ? BorderRadius.only(
-                          topLeft: Radius.circular(30.0),
-                          bottomLeft: Radius.circular(30.0),
-                          bottomRight: Radius.circular(30.0))
-                      : BorderRadius.only(
-                          bottomLeft: Radius.circular(30.0),
-                          bottomRight: Radius.circular(30.0),
-                          topRight: Radius.circular(30.0),
-                        ),
-                  elevation: 5.0,
-                  color: isMe ? Colors.lightBlueAccent : Colors.white,
-                  child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                    child: Text(
-                      text,
-                      style: TextStyle(
-                        color: isMe ? Colors.white : Colors.black54,
-                        fontSize: 15.0,
-                      ),
-                    ),
-                  ),
-                ),
-                Text(
-                  '${time.toIso8601String().substring(11, 16)}',
-                  style: TextStyle(color: Colors.white30, fontSize: 8.0),
-                ),
-                isImgAttached ?  Image.network(downloadUrl,height: 100, width: 100,):Container()
-             ]),
-
-
-        ],
-      ),
-    );
-  }
-}
 
 //TODO
-//Load associated image
+//

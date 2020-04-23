@@ -38,7 +38,7 @@ class _AnteChatroomScreenState extends State<AnteChatroomScreen> {
 
   void initState(){
     super.initState();
-    globals.getCurrentUser();
+    globals.Globals();
     globals.getCurrentUserImage();
 
     _widget =
@@ -83,19 +83,25 @@ class _AnteChatroomScreenState extends State<AnteChatroomScreen> {
 
                 TabBarView(
                     children:<Widget>[
-                      SizedBox(
-                        height: 50.0,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Friends'
-                            ),
-                            CircleAvatar(
-                            maxRadius: 50,
-                            backgroundColor: Colors.white,
-                            child: Image.asset('images/about_page.png',width: 100,),
-                          ),]
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: SizedBox(
+                          height: 50.0,
+
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Friends',
+                                style: TextStyle(fontSize: 25.0,color: Colors.black),
+                              ),
+                              CircleAvatar(
+                              maxRadius: 50,
+                              backgroundColor: Colors.yellow,
+                              child: Image.asset('images/about_page.png',width: 100,),
+                            ),]
+                          ),
                         ),
                       ),
                       IconBtn(
